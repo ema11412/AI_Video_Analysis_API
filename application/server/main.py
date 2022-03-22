@@ -5,6 +5,12 @@ from starlette.responses import RedirectResponse
 from application.components import predict, read_imagefile
 from application.schema import Symptom
 from application.components.prediction import symptom_check
+from application.schema import Parameter
+from application.components.alphaPredict import alphaPredict
+
+
+
+
 
 app_desc = """<h2>Esta API provee una prediccion de imagen digital utilizando machine learning</h2>
 <h2>Esta optimizada para la prediccion de parametros del algoritmo EVM</h2>
@@ -32,6 +38,14 @@ async def predict_api(file: UploadFile = File(...)):
 @app.post("/api/covid-symptom-check")
 def check_risk(symptom: Symptom):
     return symptom_check.get_risk_level(symptom)
+
+
+@app.post("/predict/parameter/")
+def parameterPredict(param: Parameter):
+    image = param.image
+    alpha, lambdaa = alphaPredict.alphaAnalysis(image)
+    return {"alpha": alpha, "lambda": lambdaa}
+
 
 
 if __name__ == "__main__":
