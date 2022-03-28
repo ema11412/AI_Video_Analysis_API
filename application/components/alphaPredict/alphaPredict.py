@@ -80,12 +80,12 @@ def alphaAnalysis(prueba):
     # valor de Umbral
     umbral = 20
     # Error de aproximación
-    errorApr = abs((umbral-compHash)/umbral)/10
+    errorApr = ((umbral-compHash)/umbral)/10
 
     # valor de alpha referente a la imagen encontrada
     alpha0 = df[df['id']==f'd{ind}']['a']
 
-    val = round(errorApr*alpha0+alpha0)
+    val = round(errorApr*alpha0+alpha0) 
     alpha = int(val.tolist()[0])
 
     # valor de lambda referente a la imagen encontrada
