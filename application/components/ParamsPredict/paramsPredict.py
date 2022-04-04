@@ -6,7 +6,12 @@ import imagehash
 import pandas as pd
 import numpy as np
 import json
+import base64
 
+
+
+
+#image
 
 #pruebas 
 dir0= '../../assets/'
@@ -17,8 +22,15 @@ df = pd.read_csv(f"{dir}/data/values1.csv")
 # prueba = 0
 
 def alphaAnalysis(prueba):
-    t1 = f'{dir}/test/t{prueba}.jpg'
+
+    # t1 = f'{dir}/test/t{prueba}.jpg'
     ultVal = int(df["id"].iloc[-1][1:])
+
+    image = base64.b64decode(prueba)       
+    fileName = f'{dir}/test/in.jpg'
+    image_result = open(fileName , 'wb')
+    image_result.write(image)
+    t1 = f'{dir}/test/in.jpg'
 
     # test image
     image = cv2.imread(t1)

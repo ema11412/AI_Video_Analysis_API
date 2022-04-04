@@ -35,22 +35,29 @@ async def predict_api(file: UploadFile = File(...)):
     return prediction
 
 
-@app.post("/api/covid-symptom-check")
-def check_risk(symptom: Symptom):
-    return symptom_check.get_risk_level(symptom)
+
+# @app.get("/predict/parameter/{image_analisis}")
+# def parameterPredict(image_analisis: str):
+#     # image = param.image
+#     alpha, lambdaa = paramsPredict.alphaAnalysis(image_analisis)
+
+#     poly_reg = polyReg.lambdaValue(alpha) 
+
+#     f_lambda = int((lambdaa+poly_reg)/2)
+
+#     return {"alp0": alpha, "lamb0": f_lambda}
 
 
-@app.get("/predict/parameter/{image_analisis}")
-def parameterPredict(image_analisis: str):
+@app.post("/predict/parameter")
+def ost_base64Image(base64_image: str):
     # image = param.image
-    alpha, lambdaa = paramsPredict.alphaAnalysis(image_analisis)
+    alpha, lambdaa = paramsPredict.alphaAnalysis(base64_image)
 
     poly_reg = polyReg.lambdaValue(alpha) 
 
     f_lambda = int((lambdaa+poly_reg)/2)
 
     return {"alp0": alpha, "lamb0": f_lambda}
-
 
 
 if __name__ == "__main__":
