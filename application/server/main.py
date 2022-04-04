@@ -6,13 +6,13 @@ from application.components import predict, read_imagefile
 from application.schema import Symptom
 from application.components.prediction import symptom_check
 from application.schema import Parameter
-from application.components.alphaPredict import alphaPredict
+from application.components.ParamsPredict import paramsPredict, polyReg
 
 
 
 
 
-app_desc = """<h2>Esta API provee una prediccion de imagen digital utilizando machine learning</h2>
+app_desc = """<h2>Esta API provee una predicción de imagen digital utilizando machine learning</h2>
 <h2>Esta optimizada para la prediccion de parametros del algoritmo EVM</h2>
 <br>Emanuel Esquivel López"""
 
@@ -40,13 +40,21 @@ def check_risk(symptom: Symptom):
     return symptom_check.get_risk_level(symptom)
 
 
-@app.post("/predict/parameter/")
-def parameterPredict(param: Parameter):
-    image = param.image
-    alpha, lambdaa = alphaPredict.alphaAnalysis(image)
-    return {"alpha": alpha, "lambda": lambdaa}
+@app.get("/predict/parameter/{image_analisis}")
+def parameterPredict(image_analisis: str):
+    # image = param.image
+    alpha, lambdaa = paramsPredict.alphaAnalysis(image_analisis)
+
+    poly_reg = polyReg.lambdaValue(alpha) 
+
+    f_lambda = int((lambdaa+poly_reg)/2)
+
+    return {"alp0": alpha, "lamb0": f_lambda}
 
 
 
 if __name__ == "__main__":
     uvicorn.run(app, debug=True)
+
+
+# http://127.0.0.1:8000/predict/parameter/{image_analisis}

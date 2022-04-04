@@ -7,13 +7,14 @@ import pandas as pd
 import numpy as np
 import json
 
+
 #pruebas 
 dir0= '../../assets/'
 dir = './application/assets'
 #df = pd.read_csv("../../assets/data/values1.csv")
 df = pd.read_csv(f"{dir}/data/values1.csv")
 
-#prueba = 0
+# prueba = 0
 
 def alphaAnalysis(prueba):
     t1 = f'{dir}/test/t{prueba}.jpg'
@@ -43,40 +44,15 @@ def alphaAnalysis(prueba):
 
     ind = cs.index(min(cs))
 
-    # print(f"La imagen es comparable con {ind}")
-
-    # fig, (ax1, ax2) = plt.subplots(1, 2)
-
-    # A = mpimg.imread(f'{dir}/img/d{ind}.jpg')
-    # B = mpimg.imread(t1)
-
-    # ax1.imshow(B)
-    # ax1.set_title('Imagen original')
-    # ax2.imshow(A)
-    # ax2.set_title("Imagen comparable")
-
-    #plt.show()
-
     # hashing
     ahash1 = imagehash.average_hash(Image.open(t1)) 
 
     ahash0 = imagehash.average_hash(Image.open(f'{dir}/img/d{ind}.jpg')) 
 
-    # ahash = df[df['id']==f'd{ind}']['ahash']
-    # ahash0 = ahash.tolist()[0]
-    # ahash1 = str(imagehash.average_hash(Image.open(t1)) )
-
-    # print(type(ahash0))
-    # print(type(ahash1))
-
-    # print(ahash0)
-    # print(ahash1)
-
-    # print(hamming(ahash1,ahash0))
-
     compHash = ahash1 - ahash0
 
-    # # calculo de alpha
+    # calculo de alpha
+
     # valor de Umbral
     umbral = 20
     # Error de aproximación
@@ -94,11 +70,4 @@ def alphaAnalysis(prueba):
     val = round(lambda0*errorApr+lambda0)
     lambdaa = int(val.tolist()[0])
 
-    #response = {'alpha': alpha, 'lambda' : lambdaa}
-    #print(f'El valor de alpha es {alpha}, y lambda {lambdaa}')
-
     return alpha, lambdaa
-
-
-#prueba = 0
-#print(alphaAnalysis(prueba))
