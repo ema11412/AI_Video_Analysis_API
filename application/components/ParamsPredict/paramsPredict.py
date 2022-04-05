@@ -5,16 +5,32 @@ from PIL import Image
 import imagehash
 import pandas as pd
 import numpy as np
-from scipy.spatial.distance import hamming
 import json
+import base64
 
-df = pd.read_csv("../../assets/data/values1.csv")
 
-#prueba = 0
+
+
+#image
+
+#pruebas 
+dir0= '../../assets/'
+dir = './application/assets'
+#df = pd.read_csv("../../assets/data/values1.csv")
+df = pd.read_csv(f"{dir}/data/values1.csv")
+
+# prueba = 0
 
 def alphaAnalysis(prueba):
-    t1 = f'../../assets/test/t{prueba}.jpg'
+
+    # t1 = f'{dir}/test/t{prueba}.jpg'
     ultVal = int(df["id"].iloc[-1][1:])
+
+    image = base64.b64decode(prueba)       
+    fileName = f'{dir}/test/in.jpg'
+    image_result = open(fileName , 'wb')
+    image_result.write(image)
+    t1 = f'{dir}/test/in.jpg'
 
     # test image
     image = cv2.imread(t1)
@@ -28,7 +44,7 @@ def alphaAnalysis(prueba):
 
     for i in range(ultVal+1):
         # data
-        image = cv2.imread(f'../../assets/img/d{i}.jpg')
+        image = cv2.imread(f'{dir}/img/d{i}.jpg')        
         gray_image1 = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         histogram1 = cv2.calcHist([gray_image1], [0], None, [256], [0, 256])
         i = 0
@@ -40,50 +56,24 @@ def alphaAnalysis(prueba):
 
     ind = cs.index(min(cs))
 
-    print(f"La imagen es comparable con {ind}")
-
-    fig, (ax1, ax2) = plt.subplots(1, 2)
-
-
-    A = mpimg.imread(f'../../assets/img/d{ind}.jpg')
-    B = mpimg.imread(t1)
-
-    ax1.imshow(B)
-    ax1.set_title('Imagen original')
-    ax2.imshow(A)
-    ax2.set_title("Imagen comparable")
-
-    #plt.show()
-
     # hashing
     ahash1 = imagehash.average_hash(Image.open(t1)) 
 
-    ahash0 = imagehash.average_hash(Image.open(f'../../assets/img/d{ind}.jpg')) 
-
-    # ahash = df[df['id']==f'd{ind}']['ahash']
-    # ahash0 = ahash.tolist()[0]
-    # ahash1 = str(imagehash.average_hash(Image.open(t1)) )
-
-    # print(type(ahash0))
-    # print(type(ahash1))
-
-    # print(ahash0)
-    # print(ahash1)
-
-    # print(hamming(ahash1,ahash0))
+    ahash0 = imagehash.average_hash(Image.open(f'{dir}/img/d{ind}.jpg')) 
 
     compHash = ahash1 - ahash0
 
-    # # calculo de alpha
+    # calculo de alpha
+
     # valor de Umbral
     umbral = 20
     # Error de aproximación
-    errorApr = abs((umbral-compHash)/umbral)/10
+    errorApr = ((umbral-compHash)/umbral)/10
 
     # valor de alpha referente a la imagen encontrada
     alpha0 = df[df['id']==f'd{ind}']['a']
 
-    val = round(errorApr*alpha0+alpha0)
+    val = round(errorApr*alpha0+alpha0) 
     alpha = int(val.tolist()[0])
 
     # valor de lambda referente a la imagen encontrada
@@ -92,11 +82,4 @@ def alphaAnalysis(prueba):
     val = round(lambda0*errorApr+lambda0)
     lambdaa = int(val.tolist()[0])
 
-    response = {'alpha': alpha, 'lambda' : lambdaa}
-    #print(f'El valor de alpha es {alpha}, y lambda {lambdaa}')
-
-    return response
-
-
-prueba = 0
-print(alphaAnalysis(prueba))
+    return alpha, lambdaa
