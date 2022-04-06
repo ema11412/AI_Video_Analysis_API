@@ -3,5 +3,6 @@ Video analysis with machine learning
 
 ## Run
 ```
-uvicorn application.server.main:app --reload
+uvicorn --host 0.0.0.0 --port 5000 application.server.main:app --reload
 ```
+

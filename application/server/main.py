@@ -36,16 +36,16 @@ async def predict_api(file: UploadFile = File(...)):
 
 
 
-# @app.get("/predict/parameter/{image_analisis}")
-# def parameterPredict(image_analisis: str):
-#     # image = param.image
-#     alpha, lambdaa = paramsPredict.alphaAnalysis(image_analisis)
+@app.get("/predict/parameter")
+def ost_base64Image(base64_image: str):
+    # image = param.image
+    alpha, lambdaa = paramsPredict.alphaAnalysis(base64_image)
 
-#     poly_reg = polyReg.lambdaValue(alpha) 
+    poly_reg = polyReg.lambdaValue(alpha) 
 
-#     f_lambda = int((lambdaa+poly_reg)/2)
+    f_lambda = int((lambdaa+poly_reg)/2)
 
-#     return {"alp0": alpha, "lamb0": f_lambda}
+    return {"alp0": alpha, "lamb0": f_lambda}
 
 
 @app.post("/predict/parameter")
