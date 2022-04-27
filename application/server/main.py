@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Body
 from starlette.responses import RedirectResponse
 
 from application.components import predict, read_imagefile
@@ -7,7 +7,7 @@ from application.schema import Symptom
 from application.components.prediction import symptom_check
 from application.schema import Parameter
 from application.components.ParamsPredict import paramsPredict, polyReg
-
+from application.components.inputs import inputImage
 
 
 
@@ -36,16 +36,16 @@ async def predict_api(file: UploadFile = File(...)):
 
 
 
-# @app.get("/predict/parameter/{image_analisis}")
-# def parameterPredict(image_analisis: str):
-#     # image = param.image
-#     alpha, lambdaa = paramsPredict.alphaAnalysis(image_analisis)
+@app.get("/predict/parameter")
+def ost_base64Image(base64_image: str):
+    # image = param.image
+    alpha, lambdaa = paramsPredict.alphaAnalysis(base64_image)
 
-#     poly_reg = polyReg.lambdaValue(alpha) 
+    poly_reg = polyReg.lambdaValue(alpha) 
 
-#     f_lambda = int((lambdaa+poly_reg)/2)
+    f_lambda = int((lambdaa+poly_reg)/2)
 
-#     return {"alp0": alpha, "lamb0": f_lambda}
+    return {"alp0": alpha, "lamb0": lambdaa//100}
 
 
 @app.post("/predict/parameter")
@@ -57,8 +57,18 @@ def ost_base64Image(base64_image: str):
 
     f_lambda = int((lambdaa+poly_reg)/2)
 
-    return {"alp0": alpha, "lamb0": f_lambda}
+    if (f_lambda>2000):
+        f_lambda = 1999
 
+    return {"alp0": alpha, "lamb0": lambdaa}
+
+
+
+@app.post("/predict/input")
+async def ost_base64Image(base64_image: str = Body(...)):
+    inputImage.inputImage(base64_image)
+
+    return 0
 
 if __name__ == "__main__":
     uvicorn.run(app, debug=True)
