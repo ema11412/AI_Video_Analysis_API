@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import json
 import base64
-
+import requests
 
 
 
@@ -26,10 +26,17 @@ def alphaAnalysis(prueba):
     # t1 = f'{dir}/test/t{prueba}.jpg'
     ultVal = int(df["id"].iloc[-1][1:])
 
-    image = base64.b64decode(prueba)       
-    fileName = f'{dir}/test/in.jpg'
-    image_result = open(fileName , 'wb')
-    image_result.write(image)
+    # image = base64.b64decode(prueba)       
+    # fileName = f'{dir}/test/in.jpg'
+    # image_result = open(fileName , 'wb')
+    # image_result.write(image)
+
+    # response = requests.get(prueba)
+
+    # file = open(f'{dir}/test/in.jpg', "wb")
+    # file.write(response.content)
+    #file.close()
+
     t1 = f'{dir}/test/in.jpg'
 
     # test image
