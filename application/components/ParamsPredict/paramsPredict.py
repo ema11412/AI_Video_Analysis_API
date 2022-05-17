@@ -16,26 +16,25 @@ import requests
 #pruebas 
 dir0= '../../assets/'
 dir = './application/assets'
-#df = pd.read_csv("../../assets/data/values1.csv")
+
 df = pd.read_csv(f"{dir}/data/values1.csv")
 
 # prueba = 0
 
 def alphaAnalysis(prueba):
+    '''
+        Esta funcion compara dos imagenes, utilizando los siguientes metodos
+                Histogramas
+                Hash
+        Input:
+            - prueba: String *_vacio_* de verificacion.
+        Output:
+            - alph: Int
+            - lamb: Int
+    '''
 
-    # t1 = f'{dir}/test/t{prueba}.jpg'
     ultVal = int(df["id"].iloc[-1][1:])
 
-    # image = base64.b64decode(prueba)       
-    # fileName = f'{dir}/test/in.jpg'
-    # image_result = open(fileName , 'wb')
-    # image_result.write(image)
-
-    # response = requests.get(prueba)
-
-    # file = open(f'{dir}/test/in.jpg', "wb")
-    # file.write(response.content)
-    #file.close()
 
     t1 = f'{dir}/test/in.jpg'
 

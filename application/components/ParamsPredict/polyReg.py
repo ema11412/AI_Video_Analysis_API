@@ -10,14 +10,21 @@ from sklearn.linear_model import LinearRegression
 #pruebas 
 dir0= '../../assets/'
 dir = './application/assets'
-#df = pd.read_csv("../../assets/data/values1.csv")
+
 df = pd.read_csv(f"{dir}/data/values2.csv")
 
 X = df.a.values.reshape(-1,1)
 y = df.lc.values.reshape(-1,1)
 
 def lambdaValue(alpha):
-
+    '''
+        En esta funcion se predice el parametro lambda, el cual esta en funcion de alpha
+            lc(alpha) 
+        Input:
+            - alpha : Int 
+        Output:
+            - lambda: Int
+    '''
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
     
     

@@ -26,6 +26,11 @@ async def index():
 
 @app.post("/predict/image")
 async def predict_api(file: UploadFile = File(...)):
+    '''
+        Código utilizado para la implementación de una red neuronal.
+            NO UTILIZADO
+            Podría ser de utilidad para el futuro....
+    '''
     extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
     if not extension:
         return "Image must be jpg or png format!"
@@ -38,19 +43,41 @@ async def predict_api(file: UploadFile = File(...)):
 
 @app.get("/predict/parameter")
 def ost_base64Image(base64_image: str):
-    # image = param.image
+    '''
+        Consumido por la aplicacion android,
+            No tiene una entrada significativa, ya que solo se usa un string input
+            para validar el envio de datos.
+        
+        Input: 
+            base64_image: String de comprobacion
+        Output: 
+            alp0 : Int -> Valor de alpha obtenido mediante analisis hash
+            lamb0: Int -> Valor promedio entre hash y regrecion polinomial
+    '''
     alpha, lambdaa = paramsPredict.alphaAnalysis(base64_image)
 
     poly_reg = polyReg.lambdaValue(alpha) 
 
     f_lambda = int((lambdaa+poly_reg)/2)
 
-    return {"alp0": alpha, "lamb0": lambdaa//100}
+    if (f_lambda>2000):
+        f_lambda = 1999
+
+    return {"alp0": alpha, "lamb0": f_lambda//100}
 
 
 @app.post("/predict/parameter")
 def ost_base64Image(base64_image: str):
-    # image = param.image
+    '''
+        Para pruebas locales.
+        Se usa para analizar los parametros alpha y lambda
+
+        Input: 
+            base64_image: String de comprobacion
+        Output: 
+            alp0 : Int -> Valor de alpha obtenido mediante analisis hash
+            lamb0: Int -> Valor promedio entre hash y regrecion polinomial
+    '''
     alpha, lambdaa = paramsPredict.alphaAnalysis(base64_image)
 
     poly_reg = polyReg.lambdaValue(alpha) 
@@ -66,12 +93,20 @@ def ost_base64Image(base64_image: str):
 
 @app.post("/predict/input")
 async def ost_base64Image(base64_image: str = Body(...)):
+    '''
+        Consumido por la aplicacion android,
+            No tiene una entrada significativa, ya que solo se usa un string input
+            para validar el envio de datos.
+        
+        Input: 
+            base64_image: String con la imagen codificada en b64
+                          enviada en el Body(...)
+        Output: 
+            0 : Sin especificar.
+    '''    
     inputImage.inputImage(base64_image)
 
     return 0
 
 if __name__ == "__main__":
     uvicorn.run(app, debug=True)
-
-
-# http://127.0.0.1:8000/predict/parameter/{image_analisis}
